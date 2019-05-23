@@ -1,6 +1,6 @@
 use crate::days::Day;
-use std::collections::HashSet;
 use std::fs;
+use std::collections::HashSet;
 
 pub struct Day1 {
     input: String,
@@ -16,30 +16,30 @@ impl Day1 {
 
 impl Day for Day1 {
     fn part1(&self) -> String {
-        let result = &self
-            .input
+        self.input
             .lines()
-            .map(|value| value.parse::<i32>().unwrap())
-            .sum::<i32>();
-
-        return format!("Resulting frequency: {}", &result);
+            .map(|x| x.parse::<i32>().unwrap())
+            .sum::<i32>()
+            .to_string()
     }
 
     fn part2(&self) -> String {
-        let values = &self
-            .input
-            .lines()
-            .map(|value| value.parse::<i32>().unwrap())
-            .collect::<Vec<i32>>();
+        let changes: Vec<i32> =
+            self.input
+                .lines()
+                .map(|x| x.parse::<i32>().unwrap())
+                .collect();
 
-        let mut unique_values = HashSet::new();
-        let mut frequency = 0;
+        let mut current_frequency: i32 = 0;
+        let mut unique_frequencies = HashSet::new();
 
         loop {
-            for value in values {
-                frequency += value;
-                if !unique_values.insert(frequency) {
-                    return format!("First repeated frequency: {}", frequency);
+            for change in &changes {
+                if unique_frequencies.contains(&current_frequency) {
+                    return current_frequency.to_string()
+                } else {
+                    unique_frequencies.insert(current_frequency);
+                    current_frequency += change;
                 }
             }
         }
@@ -52,11 +52,11 @@ mod day1_tests {
 
     #[test]
     fn part1_puzzle() {
-        assert!(Day1::new().part1().ends_with("423"));
+        assert!(Day1::new().part1().equals("592"));
     }
 
     #[test]
     fn part2_puzzle() {
-        assert!(Day1::new().part2().ends_with("61126"));
+        assert!(Day1::new().part2().equals("241"));
     }
 }

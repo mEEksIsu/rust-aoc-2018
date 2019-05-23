@@ -52,11 +52,11 @@ mod day1_tests {
 
     #[test]
     fn part1_puzzle() {
-        assert!(Day1::new().part1().equals("592"));
+        assert!(Day1::new().part1() == "592");
     }
 
     #[test]
     fn part2_puzzle() {
-        assert!(Day1::new().part2().equals("241"));
+        assert!(Day1::new().part2() == "241");
     }
 }

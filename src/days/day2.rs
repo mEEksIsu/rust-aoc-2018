@@ -16,56 +16,34 @@ impl Day2 {
 
 impl Day for Day2 {
     fn part1(&self) -> String {
-        let mut two_count = 0;
-        let mut three_count = 0;
-        let lines = self.input.lines();
-
-        for line in lines {
-            let mut map = HashMap::new();
-
-            line.chars().for_each(|x| {
-                let count = map.entry(x).or_insert(0);
-                *count += 1;
-            });
-
-            if map.values().any(|x| *x == 2) {
-                two_count += 1;
-            }
-
-            if map.values().any(|x| *x == 3) {
-                three_count += 1;
-            }
-        }
-
-        let result = two_count * three_count;
-
-        return format!("Checksum: {}", &result);
+        (self.input
+            .lines()
+            .map(|x| is_char_repeated_in_id(&x.to_string(), 2))
+            .filter(|x| *x)
+            .count() *
+        self.input
+            .lines()
+            .map(|x| is_char_repeated_in_id(&x.to_string(), 3))
+            .filter(|x| *x)
+            .count()).to_string()
     }
 
     fn part2(&self) -> String {
-        let lines = self.input.lines().collect::<Vec<&str>>();
-        let line_count = lines.len();
-        let line_size = lines[0].len();
-
-        for i in 0..line_count {
-            for j in (i + 1)..line_count {
-                let (common, _) = lines[i]
-                    .chars()
-                    .zip(lines[j].chars())
-                    .filter(|&(a, b)| a == b)
-                    .unzip::<char, char, Vec<_>, Vec<_>>();
-
-                if common.len() == line_size - 1 {
-                    return format!(
-                        "Correct boxes common letters: {}",
-                        &common.iter().collect::<String>()
-                    );
-                }
-            }
-        }
-
-        panic!("Correct boxes were not found!");
+        "".to_string()
     }
+}
+
+fn is_char_repeated_in_id(id: &String, repeat_count: u32) -> bool {
+    let mut frequency: HashMap<char, u32> = HashMap::new();
+
+    for ch in id.chars() {
+        let count = frequency.entry(ch).or_insert(0);
+        *count += 1;
+    }
+
+    frequency.values()
+        .find(|&val| *val == repeat_count)
+        .is_some()
 }
 
 #[cfg(test)]
@@ -74,7 +52,7 @@ mod day2_tests {
 
     #[test]
     fn part1_puzzle() {
-        assert!(Day2::new().part1().ends_with("7776"));
+        assert!(Day2::new().part1() == "6150");
     }
 
     #[test]
